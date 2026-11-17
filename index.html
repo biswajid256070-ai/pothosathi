@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পথসাথী - স্মার্ট ব্লাইন্ড স্টিক অ্যাপ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #0f766e, #0d9488);
+            color: white;
+            padding: 1.8rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+        .school-tag {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 0.25rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        .container {
+            max-width: 850px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* স্মার্ট অ্যাকশন প্যানেল (দৃষ্টিপ্রতিবন্ধীদের জন্য বড় বাটন) */
+        .action-panel {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .big-btn {
+            border: none;
+            border-radius: 16px;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transition: transform 0.2s, opacity 0.2s;
+            text-decoration: none;
+        }
+        .big-btn:active {
+            transform: scale(0.97);
+        }
+        .btn-sos {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+        .btn-voice {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+        .btn-alert {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+        }
+        
+        #status-box {
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: #92400e;
+            display: none;
+        }
+        #whatsapp-link {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: #16a34a;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        /* সাধারণ কার্ড ডিজাইন */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .card h2 {
+            color: #0f766e;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.4rem;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+        .feature-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #0d9488;
+        }
+        .team-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+        .team-member {
+            background: #f0fdf4;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #065f46;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #0f172a;
+            color: #cbd5e1;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-person-walking-with-cane"></i> পথসাথী (Pothoshathi)</h1>
+        <p>স্মার্ট ব্লাইন্ড স্টিক ও ডিজিটাল সহায়ক অ্যাপ</p>
+        <div class="school-tag"><i class="fa-solid fa-school"></i> দত্তগ্রাম মাধ্যমিক বিদ্যালয়</div>
+    </header>
+
+    <div class="container">
+        
+        <!-- স্ট্যাটাস এবং লোকেশন বক্স -->
+        <div id="status-box">
+            <p id="status-text">লোকেশন খোঁজা হচ্ছে...</p>
+            <div id="share-area"></div>
+        </div>
+
+        <!-- দৃষ্টিপ্রতিবন্ধীদের জন্য স্মার্ট কন্ট্রোল প্যানেল -->
+        <div class="action-panel">
+            <button class="big-btn btn-sos" onclick="sendEmergencyLocation()">
+                <i class="fa-solid fa-location-crosshairs fa-lg"></i> জরুরি সাহায্য ও লোকেশন পাঠান (SOS)
+            </button>
+            
+            <button class="big-btn btn-voice" onclick="readInstructions()">
+                <i class="fa-solid fa-volume-high fa-lg"></i> ভয়েস নির্দেশনা শুনুন
+            </button>
+
+            <button class="big-btn btn-alert" onclick="triggerBuzzerAlert()">
+                <i class="fa-solid fa-bell fa-lg"></i> সতর্কতামূলক সাউন্ড বাজান
+            </button>
+        </div>
+
+        <!-- প্রজেক্টের বিবরণ -->
+        <div class="card">
+            <h2>প্রজেক্ট সম্পর্কে</h2>
+            <p><strong>পথসাথী</strong> হলো দৃষ্টিপ্রতিবন্ধী মানুষদের নিরাপদ চলাচলের জন্য তৈরি একটি আধুনিক স্মার্ট ব্লাইন্ড স্টিক এবং ওয়েব অ্যাপ্লিকেশন। এতে থাকা সেন্সর সামনের বাধা ও নিচের গর্ত সনাক্ত করে এবং এই অ্যাপের মাধ্যমে ব্যবহারকারী জরুরি মুহূর্তে নিজের অবস্থান পরিবারকে জানাতে পারেন।</p>
+        </div>
+
+        <!-- হার্ডওয়্যার বৈশিষ্ট্য -->
+        <div class="card">
+            <h2>স্টিকের মূল বৈশিষ্ট্যসমূহ</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3><i class="fa-solid fa-radar" style="color:#0284c7;"></i> বাধা সনাক্তকরণ</h3>
+                    <p>সামনে ২০০ সেমি পর্যন্ত কোনো বস্তু বা দেয়াল থাকলে তা দ্রুত সনাক্ত করে সতর্কবার্তা দেয়।</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fa-solid fa-arrow-down-wide-short" style="color:#d97706;"></i> গর্ত সনাক্তকরণ</h3>
+                    <p>রাস্তায় ৫০ সেমির বেশি গভীর গর্ত বা সিঁড়ি থাকলে নিচের সেন্সর তা ধরে ফেলে।</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fa-solid fa-wave-square" style="color:#16a34a;"></i> ভাইব্রেশন ও বাজার</h3>
+                    <p>শব্দ ও কম্পনের মাধ্যমে ব্যবহারকারীকে বিপদের দূরত্ব সম্পর্কে ধারণা দেয়।</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- টিম পরিচিতি -->
+        <div class="card">
+            <h2>প্রজেক্ট টিম সদস্যবৃন্দ</h2>
+            <p>ব্রাক নেক্সট জেনস সলভ (BRAC NextGen Solve) এর জন্য প্রস্তুতকৃত:</p>
+            <ul class="team-list">
+                <li class="team-member"><i class="fa-solid fa-user-check"></i> নবীন দাস আবির</li>
+                <li class="team-member"><i class="fa-solid fa-user-check"></i> কৃপাচার্য চক্রবর্তী অনিক</li>
+                <li class="team-member"><i class="fa-solid fa-user-check"></i> মেহেনাজ আক্তার প্রমা</li>
+                <li class="team-member"><i class="fa-solid fa-user-check"></i> আকলিমা আক্তার</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; ২০২৬ পথসাথী প্রজেক্ট | দত্তগ্রাম মাধ্যমিক বিদ্যালয়</p>
+    </footer>
+
+    <script>
+        // ভয়েস বলার ফাংশন (Text-to-Speech)
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'bn-BD'; // বাংলা ভাষা সেট করা হলো
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // ভয়েস নির্দেশনা বাটনের কাজ
+        function readInstructions() {
+            const msg = "স্বাগতম। এটি পথসাথী স্মার্ট অ্যাপ। জরুরি সাহায্যের জন্য উপরের লাল বাটনে চাপ দিন।";
+            speak(msg);
+            showStatus("ভয়েস নির্দেশনা চালু হয়েছে...");
+        }
+
+        // জরুরি লোকেশন বের করা ও শেয়ার করার ফাংশন
+        function sendEmergencyLocation() {
+            speak("আপনার বর্তমান লোকেশন খোঁজা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন।");
+            showStatus("GPS লোকেশন খোঁজা হচ্ছে...");
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        const message = encodeURIComponent(`জরুরি সাহায্য প্রয়োজন! আমি পথসাথী অ্যাপ থেকে বলছি। আমার বর্তমান লোকেশন: ${mapLink}`);
+                        
+                        speak("লোকেশন পাওয়া গেছে। নিচে সবুজ বাটনে চাপ দিয়ে হোয়াটসঅ্যাপে পাঠান।");
+                        
+                        const statusText = document.getElementById("status-text");
+                        const shareArea = document.getElementById("share-area");
+                        
+                        statusText.innerHTML = `লোকেশন পাওয়া গেছে! <br> অক্ষাংশ: ${lat.toFixed(4)}, দ্রাঘিমাংশ: ${lon.toFixed(4)}`;
+                        shareArea.innerHTML = `<a id="whatsapp-link" href="https://wa.me/?text=${message}" target="_blank"><i class="fa-brands fa-whatsapp"></i> হোয়াটসঅ্যাপে লোকেশন পাঠান</a>`;
+                    },
+                    function(error) {
+                        speak("দুঃখিত, ফোনের লোকেশন চালু নেই। অনুগ্রহ করে লোকেশন অন করুন।");
+                        showStatus("লোকেশন পাওয়া যায়নি। ফোনের GPS / Location চালু করুন।");
+                    }
+                );
+            } else {
+                showStatus("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+            }
+        }
+
+        // সতর্কতামূলক বিপ সাউন্ড (Web Audio API - কোনো এক্সটার্নাল ফাইল ছাড়াই)
+        function triggerBuzzerAlert() {
+            speak("সতর্কতা সংকেত বাজানো হচ্ছে।");
+            showStatus("সতর্কতামূলক সাউন্ড বাজছে!");
+            
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // তীব্র শব্দ
+            gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            setTimeout(() => {
+                oscillator.stop();
+            }, 1200); // ১.২ সেকেন্ড বাজবে
+        }
+
+        function showStatus(text) {
+            const box = document.getElementById("status-box");
+            const statusText = document.getElementById("status-text");
+            box.style.display = "block";
+            statusText.innerText = text;
+        }
+    </script>
+</body>
+</html>
